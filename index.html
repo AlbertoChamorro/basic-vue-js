@@ -31,8 +31,7 @@
                 {{question.name}}
                 <br/>
                 <template v-for="option in question.options">
-                    <input type="checkbox" :id="option.id" :value="option.id" v-model="dataForm.courses"/>
-                    <label :for="option.id">{{ option.name }}</label>
+                    <course :option="option" v-on:checked-option="checkedOption"></course>
                 </template>
             </li>
             <button type="submit">send</button>
@@ -41,6 +40,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script type="text/javascript">
+        Vue.component('course', {
+            props: ['option'],
+            template: `
+                <div>
+                    <input type="checkbox" :id="option.id" :value="option.id" @change="selectedCourse"/>
+                    <label :for="option.id">{{ option.name }}</label>
+                </div>
+            `,
+            methods: {
+                selectedCourse: function(event){
+                    this.$emit('checked-option', this.option.id, event.target.checked)
+                }
+            }
+        })
         let app = new Vue({
             el: '#app',
             data: {
@@ -53,7 +66,7 @@
 
                 dataForm: {  
                         fullName: '',
-                        courses: []
+                        options: []
                     },
                 questions: []
             },
@@ -87,7 +100,17 @@
                 },
                 sendCourses: function(event){
                     console.log('send... ', event)
-                    console.log('courses selected ', this.dataForm.courses)
+                    console.log('options selected ', this.dataForm.options)
+                },
+                checkedOption: function(optionId, isCheked){
+                    console.log('change option ', optionId, isCheked)
+                    if(isCheked){
+                        this.dataForm.options.push(optionId)
+                        return
+                    }
+
+                    let optionIndex = this.dataForm.options.indexOf(optionId) 
+                    this.dataForm.options.splice(optionIndex, 1)
                 }
             },
             filters: {
