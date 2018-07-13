@@ -11,6 +11,10 @@
         <template v-if="showData">
             <h2> Hello {{ name | lowercase | capitalize}} <span v-show="hasProfile"> <a v-bind:href="siteUrl" target="_blank">facebook profile</a> </span> </h2>
         </template>
+
+        <span>Counter value is {{ counter }}</span>
+        <input type="button" @click="sumCounter" value="+"/>
+        <input type="button" v-on:click="diffCounter" value="-"/>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -21,7 +25,17 @@
                 name: 'Alberto Martin Chamorro Cabezas',
                 siteUrl: 'https://www.facebook.com/profile.php?id=100006691396145',
                 hasProfile: true,
-                showData: true
+                showData: true,
+
+                counter: 0
+            },
+            methods: {
+                sumCounter: function() {
+                    this.counter++
+                },
+                diffCounter: function() {
+                    this.counter--
+                }
             },
             filters: {
                 uppercase: str => {
