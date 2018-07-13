@@ -11,6 +11,32 @@
         <template v-if="showData">
             <h2> Hello {{ name | lowercase | capitalize}} <span v-show="hasProfile"> <a v-bind:href="siteUrl" target="_blank">facebook profile</a> </span> </h2>
         </template>
+
+        <span>Counter value is {{ counter }}</span>
+        <input type="button" @click="sumCounter" value="+"/>
+        <input type="button" v-on:click="diffCounter" value="-"/>
+
+        <br/> <br/>
+        <hr/>
+        <br/>
+
+        <input type="text" placeholder="fullName" v-model="dataForm.fullName"/>
+        <span> The Name in uppercase is {{ dataForm.fullName | uppercase}} </span>
+
+        <br/>
+        <br/>
+        <h3>Course List</h3>
+        <form @submit.prevent="sendCourses">
+            <li v-for="question in questions">
+                {{question.name}}
+                <br/>
+                <template v-for="option in question.options">
+                    <input type="checkbox" :id="option.id" :value="option.id" v-model="dataForm.courses"/>
+                    <label :for="option.id">{{ option.name }}</label>
+                </template>
+            </li>
+            <button type="submit">send</button>
+        </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -21,7 +47,48 @@
                 name: 'Alberto Martin Chamorro Cabezas',
                 siteUrl: 'https://www.facebook.com/profile.php?id=100006691396145',
                 hasProfile: true,
-                showData: true
+                showData: true,
+
+                counter: 0,
+
+                dataForm: {  
+                        fullName: '',
+                        courses: []
+                    },
+                questions: []
+            },
+            methods: {
+                sumCounter: function() {
+                    this.counter++
+                },
+                diffCounter: function() {
+                    this.counter--
+                },
+                mockDataQuetions: function(){
+                    this.questions = [
+                        {
+                            name: "Cuales son tus cursos Favoritos?",
+                            options: [
+                                {
+                                    id: 1,
+                                    name: "Vue.js"
+                                },
+                                {
+                                    id: 2,
+                                    name: "Angular.js"
+                                },
+                                {
+                                    id: 3,
+                                    name: "React.js"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                sendCourses: function(event){
+                    console.log('send... ', event)
+                    console.log('courses selected ', this.dataForm.courses)
+                }
             },
             filters: {
                 uppercase: str => {
@@ -33,6 +100,9 @@
                 capitalize: str => {
                     return str.charAt(0).toUpperCase() + str.slice(1);
                 }
+            },
+            mounted() {
+                this.mockDataQuetions()
             }
         })
     </script>
