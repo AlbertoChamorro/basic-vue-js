@@ -8,7 +8,9 @@
 </head>
 <body>
     <div id="app">
-        <h2> Hello {{ name }} <span> <a v-bind:href="siteUrl" target="_blank">facebook profile</a> </span> </h2>
+        <template v-if="showData">
+            <h2> Hello {{ name }} <span v-show="hasProfile"> <a v-bind:href="siteUrl" target="_blank">facebook profile</a> </span> </h2>
+        </template>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -17,7 +19,9 @@
             el: '#app',
             data: {
                 name: 'Alberto Martin Chamorro Cabezas',
-                siteUrl: 'https://www.facebook.com/profile.php?id=100006691396145'
+                siteUrl: 'https://www.facebook.com/profile.php?id=100006691396145',
+                hasProfile: true,
+                showData: true
             }
         })
     </script>
